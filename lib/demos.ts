@@ -1,5 +1,14 @@
 export const demos = [
   {
+    id: "subtext-chat",
+    titleKey: "demo9" as const,
+    path: "/demos/subtext-chat",
+    icon: "🎯",
+    descriptionEn: "Live subtext radar with chat + conditions engine",
+    descriptionHe: "רדאר סאבטקסט חי עם צ׳אט ומנוע תנאים",
+    featured: true,
+  },
+  {
     id: "inbox-triage",
     titleKey: "demo1" as const,
     path: "/demos/inbox-triage",
