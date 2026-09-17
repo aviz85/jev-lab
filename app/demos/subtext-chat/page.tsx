@@ -63,6 +63,7 @@ export default function SubtextChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [radarHistory, setRadarHistory] = useState<RadarHistory[]>([]);
   const [conditionChanges, setConditionChanges] = useState<Array<{ turn: number; condition: string; active: boolean }>>([]);
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -78,9 +79,11 @@ export default function SubtextChatPage() {
 
     const userMessage: Message = { role: "user", content: input.trim() };
     const updatedMessages = [...messages, userMessage];
-    setMessages(updatedMessages);
+    const messageToSend = input.trim();
+    
     setInput("");
     setLoading(true);
+    setError(null);
 
     try {
       const response = await fetch("/api/subtext-chat", {
@@ -89,11 +92,12 @@ export default function SubtextChatPage() {
         body: JSON.stringify({ messages: updatedMessages, locale: lang }),
       });
 
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-
       const data = await response.json();
+
+      if (!response.ok || data.error) {
+        const errorMessage = data.error || `API error: ${response.status}`;
+        throw new Error(errorMessage);
+      }
       
       setMessages(data.messages);
 
@@ -122,8 +126,9 @@ export default function SubtextChatPage() {
       }
     } catch (error) {
       console.error("Error:", error);
-      // Remove the optimistic user message on error
-      setMessages(messages);
+      const errorMsg = error instanceof Error ? error.message : "Unknown error";
+      setError(errorMsg);
+      setInput(messageToSend);
     } finally {
       setLoading(false);
     }
@@ -177,10 +182,17 @@ export default function SubtextChatPage() {
               {/* Messages */}
               <div className="flex-1 overflow-y-auto space-y-3 mb-4">
                 {messages.length === 0 && (
-                  <div className="text-center text-gray-500 mt-16">
-                    {lang === "he"
-                      ? "בחר הקדמה או התחל לכתוב..."
-                      : "Choose a preset or start typing..."}
+                  <div className="text-center mt-16">
+                    <div className="text-gray-500 mb-3">
+                      {lang === "he"
+                        ? "בחר הקדמה או התחל לכתוב..."
+                        : "Choose a preset or start typing..."}
+                    </div>
+                    <div className="text-xs text-gray-600">
+                      {lang === "he"
+                        ? "דורש OPENROUTER_API_KEY ב־Vercel"
+                        : "Requires OPENROUTER_API_KEY in Vercel"}
+                    </div>
                   </div>
                 )}
                 {messages.map((msg, idx) => (
@@ -221,6 +233,40 @@ export default function SubtextChatPage() {
 
               {/* Input */}
               <div className="space-y-2">
+                {error && (
+                  <div className="rounded-lg border border-red-600 bg-red-900/20 px-4 py-3 flex items-start gap-3">
+                    <span className="text-red-400 text-lg">⚠️</span>
+                    <div className="flex-1">
+                      <div className="text-sm font-bold text-red-300 mb-1">
+                        {lang === "he" ? "שגיאה" : "Error"}
+                      </div>
+                      <div className="text-sm text-red-200">
+                        {error.includes("OPENROUTER_API_KEY") ? (
+                          <>
+                            {lang === "he" ? (
+                              <>
+                                <strong>OPENROUTER_API_KEY</strong> לא מוגדר. יש להגדיר את המפתח ב־Vercel.
+                              </>
+                            ) : (
+                              <>
+                                <strong>OPENROUTER_API_KEY</strong> not configured. Please set the key in Vercel.
+                              </>
+                            )}
+                          </>
+                        ) : (
+                          error
+                        )}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setError(null)}
+                      className="text-red-400 hover:text-red-300 transition-colors"
+                      aria-label="Close"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
                 <textarea
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
