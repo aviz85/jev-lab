@@ -49,6 +49,46 @@ export default function Home() {
             />
           </div>
 
+          {/* Featured Demo */}
+          <div className="mb-16">
+            <Link
+              href="/demos/subtext-chat"
+              className="group block relative overflow-hidden rounded-2xl border-2 border-purple-700/50 bg-gradient-to-br from-purple-900/30 via-gray-900/50 to-blue-900/30 p-8 backdrop-blur-sm transition-all hover:border-purple-500 hover:shadow-2xl hover:shadow-purple-500/20"
+            >
+              <div className="flex flex-col md:flex-row items-center gap-6">
+                <div className="text-8xl">🎯</div>
+                <div className="flex-1 text-center md:text-left">
+                  <div className="inline-block px-3 py-1 mb-3 text-xs font-bold uppercase bg-purple-600/30 text-purple-300 rounded-full border border-purple-500/50">
+                    {lang === "he" ? "★ הדגמה המרכזית ★" : "★ Featured Demo ★"}
+                  </div>
+                  <h3 className="text-3xl font-bold mb-2 text-purple-300 glow">
+                    {t(lang, "demo9")}
+                  </h3>
+                  <p className="text-gray-300 mb-3">
+                    {lang === "he"
+                      ? "צ׳אט עם נציגת תמיכה + רדאר Jev חי שמגלה כוונות נסתרות, רגשות אמיתיים ומפעיל תנאים בזמן אמת"
+                      : "Chat with support agent + live Jev radar revealing hidden intent, true emotions, and triggering conditions in real-time"}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-2 py-1 text-xs bg-blue-900/50 text-blue-300 rounded border border-blue-700/50">
+                      OpenRouter + Jev
+                    </span>
+                    <span className="px-2 py-1 text-xs bg-blue-900/50 text-blue-300 rounded border border-blue-700/50">
+                      {lang === "he" ? "מנוע תנאים" : "Conditions Engine"}
+                    </span>
+                    <span className="px-2 py-1 text-xs bg-blue-900/50 text-blue-300 rounded border border-blue-700/50">
+                      {lang === "he" ? "ניתוח סאבטקסט" : "Subtext Analysis"}
+                    </span>
+                  </div>
+                </div>
+                <div className="text-purple-400 text-2xl group-hover:translate-x-2 transition-transform">
+                  →
+                </div>
+              </div>
+              <div className="absolute inset-0 bg-purple-500/5 opacity-0 transition-opacity group-hover:opacity-100" />
+            </Link>
+          </div>
+
           <div className="mb-16">
             <h2 className="text-3xl font-bold mb-8 text-center text-blue-300">
               {t(lang, "demos")}
