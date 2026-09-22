@@ -20,6 +20,7 @@ export interface MoneyHackState {
   thesis_one_liner: string;
   optional_fields: Record<string, string | number | boolean | null>;
   evaluation_goal: string;
+  [key: string]: string | string[] | Record<string, string | number | boolean | null>;
 }
 
 export function buildMoneyHackState(idea: string): MoneyHackState {
@@ -40,13 +41,15 @@ export function buildMoneyHackState(idea: string): MoneyHackState {
     const channelMatch = text.match(
       /whatsapp|telegram|instagram|facebook|tiktok|email|sms/i
     );
-    if (channelMatch && channelMatch[0]) optional.channel_hint = channelMatch[0];
+    const channelHint = channelMatch?.[0];
+    if (channelHint) optional.channel_hint = channelHint;
   }
   if (/\b(salon|clinic|restaurant|shop|store|agency|freelancer|coach|course)\b/i.test(text)) {
     const audienceMatch = text.match(
       /\b(salon|clinic|restaurant|shop|store|agency|freelancer|coach|course)s?\b/i
     );
-    if (audienceMatch && audienceMatch[0]) optional.audience_hint = audienceMatch[0];
+    const audienceHint = audienceMatch?.[0];
+    if (audienceHint) optional.audience_hint = audienceHint;
   }
 
   return {
