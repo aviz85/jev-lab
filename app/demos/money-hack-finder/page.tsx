@@ -5,11 +5,19 @@ import { NavBar } from "@/components/NavBar";
 import { DemoLayout } from "@/components/DemoLayout";
 import { Language, t } from "@/lib/i18n";
 
+interface AtomAnswer {
+  noul?: number;
+  score?: number;
+  choice?: string;
+  confidence?: number;
+}
+
 interface MoneyHackResult {
   outcome: "hack" | "maybe" | "nope" | "need_info";
   confidence: number;
   explanationEn: string;
   explanationHe: string;
+  atoms: Record<string, AtomAnswer>;
   simplifyTips: string[];
   scores: {
     complexity_for_buyer?: number;
@@ -17,6 +25,7 @@ interface MoneyHackResult {
     time_to_first_shekel?: number;
   };
   hack_shape?: string;
+  lowConfidenceAtoms: string[];
   latency?: number;
 }
 
@@ -42,6 +51,115 @@ const PRESETS_HE = [
   "מחולל חשבוניות בלחיצה אחת לפרילנסרים, ₪49 חד פעמי",
   "חבילת תבניות: 10 הצעות מחיר מוכנות ללקוחות, ₪199",
 ];
+
+const ATOM_LABELS: Record<string, { en: string; he: string }> = {
+  buyer_want_one_sentence: { en: "Clear buyer want", he: "רצון קונה ברור" },
+  stranger_gets_it_30s: { en: "Graspable in 30s", he: "מובן ב-30 שניות" },
+  is_simple: { en: "Simple method", he: "שיטה פשוטה" },
+  audience_exists: { en: "Audience exists", he: "קהל קיים" },
+  path_to_paid_short: { en: "Short path to paid", he: "נתיב קצר לתשלום" },
+  payment_path_clear: { en: "Payment clear", he: "תשלום ברור" },
+  sellable_this_week: { en: "Sellable this week", he: "ניתן למכור השבוע" },
+  needs_new_product: { en: "Needs new product", he: "צריך מוצר חדש" },
+  confidence_ship_this_week: { en: "Ship this week", he: "שליחה השבוע" },
+  ai_accelerates_value: { en: "AI accelerates", he: "AI מאיץ" },
+  ai_is_necessary: { en: "AI necessary", he: "AI הכרחי" },
+  buyer_pays_for_simplicity: { en: "Pays for simplicity", he: "משלם עבור פשטות" },
+  delivery_light: { en: "Light delivery", he: "אספקה קלה" },
+  still_too_many_steps: { en: "Too many steps", he: "יותר מדי צעדים" },
+  builder_only_vs_mass: { en: "Builder-only", he: "למתכנתים בלבד" },
+  needs_more_idea_detail: { en: "Need more detail", he: "צריך פירוט" },
+  complexity_for_buyer: { en: "Buyer complexity", he: "מורכבות לקונה" },
+  cash_velocity: { en: "Cash velocity", he: "מהירות כסף" },
+  time_to_first_shekel: { en: "First shekel time", he: "זמן לשקל ראשון" },
+  hack_shape: { en: "Hack shape", he: "צורת hack" },
+};
+
+function AtomDisplay({
+  atomKey,
+  atom,
+  lang,
+  isLowConf,
+}: {
+  atomKey: string;
+  atom: AtomAnswer;
+  lang: Language;
+  isLowConf: boolean;
+}) {
+  const label = ATOM_LABELS[atomKey] || { en: atomKey, he: atomKey };
+  const displayLabel = lang === "he" ? label.he : label.en;
+
+  return (
+    <div
+      className={`rounded border p-2 text-xs ${
+        isLowConf
+          ? "border-yellow-600 bg-yellow-900/20"
+          : "border-gray-700 bg-gray-800/30"
+      }`}
+    >
+      <div className="flex items-start justify-between gap-2 mb-1">
+        <span className="text-gray-300 font-medium">{displayLabel}</span>
+        {atom.confidence != null && (
+          <span
+            className={`text-xs font-mono ${
+              isLowConf ? "text-yellow-400" : "text-gray-400"
+            }`}
+          >
+            {(atom.confidence * 100).toFixed(0)}%
+          </span>
+        )}
+      </div>
+
+      {atom.noul != null && (
+        <div className="space-y-1">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-gray-500">noul</span>
+            <span className="font-mono text-blue-400">
+              {(atom.noul * 100).toFixed(0)}%
+            </span>
+          </div>
+          <div className="w-full bg-gray-700 rounded-full h-1.5">
+            <div
+              className={`h-1.5 rounded-full ${
+                atom.noul >= 0.55
+                  ? "bg-green-500"
+                  : atom.noul >= 0.4
+                    ? "bg-yellow-500"
+                    : "bg-red-500"
+              }`}
+              style={{ width: `${atom.noul * 100}%` }}
+            />
+          </div>
+        </div>
+      )}
+
+      {atom.score != null && (
+        <div className="space-y-1">
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-gray-500">score</span>
+            <span className="font-mono text-purple-400">
+              {atom.score.toFixed(2)}
+            </span>
+          </div>
+          <div className="w-full bg-gray-700 rounded-full h-1.5">
+            <div
+              className="bg-purple-500 h-1.5 rounded-full"
+              style={{ width: `${(atom.score / 3) * 100}%` }}
+            />
+          </div>
+        </div>
+      )}
+
+      {atom.choice != null && (
+        <div className="mt-1">
+          <span className="inline-block px-2 py-0.5 rounded text-xs bg-blue-900/50 text-blue-200 border border-blue-700">
+            {atom.choice}
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function MoneyHackFinderPage() {
   const [lang, setLang] = useState<Language>("he");
@@ -236,6 +354,31 @@ export default function MoneyHackFinderPage() {
                         </ul>
                       </div>
                     )}
+                    {winner.result.atoms &&
+                      Object.keys(winner.result.atoms).length > 0 && (
+                        <details className="mt-4 group">
+                          <summary className="cursor-pointer text-gray-400 hover:text-gray-300 text-xs font-medium">
+                            {lang === "he"
+                              ? `📊 אטומי שיפוט (${Object.keys(winner.result.atoms).length})`
+                              : `📊 Judgment Atoms (${Object.keys(winner.result.atoms).length})`}
+                          </summary>
+                          <div className="mt-3 grid grid-cols-2 gap-2">
+                            {Object.entries(winner.result.atoms).map(
+                              ([key, atom]) => (
+                                <AtomDisplay
+                                  key={key}
+                                  atomKey={key}
+                                  atom={atom}
+                                  lang={lang}
+                                  isLowConf={winner.result.lowConfidenceAtoms?.includes(
+                                    key
+                                  )}
+                                />
+                              )
+                            )}
+                          </div>
+                        </details>
+                      )}
                   </div>
                   {doneReason && (
                     <div className="mt-4 text-xs text-gray-500">
@@ -310,6 +453,31 @@ export default function MoneyHackFinderPage() {
                             <span>{variant.result.latency}ms</span>
                           )}
                         </div>
+                        {variant.result.atoms &&
+                          Object.keys(variant.result.atoms).length > 0 && (
+                            <details className="mt-3 group">
+                              <summary className="cursor-pointer text-gray-400 hover:text-gray-300 text-xs font-medium">
+                                {lang === "he"
+                                  ? `📊 אטומים (${Object.keys(variant.result.atoms).length})`
+                                  : `📊 Atoms (${Object.keys(variant.result.atoms).length})`}
+                              </summary>
+                              <div className="mt-2 grid grid-cols-2 gap-2">
+                                {Object.entries(variant.result.atoms).map(
+                                  ([key, atom]) => (
+                                    <AtomDisplay
+                                      key={key}
+                                      atomKey={key}
+                                      atom={atom}
+                                      lang={lang}
+                                      isLowConf={variant.result.lowConfidenceAtoms?.includes(
+                                        key
+                                      )}
+                                    />
+                                  )
+                                )}
+                              </div>
+                            </details>
+                          )}
                       </div>
                     ))}
                   </div>
@@ -342,6 +510,31 @@ export default function MoneyHackFinderPage() {
                           {lang === "he" ? "ביטחון:" : "Conf:"}{" "}
                           {(variant.result.confidence * 100).toFixed(0)}%
                         </div>
+                        {variant.result.atoms &&
+                          Object.keys(variant.result.atoms).length > 0 && (
+                            <details className="mt-2 group" open>
+                              <summary className="cursor-pointer text-gray-400 hover:text-gray-300 text-xs font-medium mb-2">
+                                {lang === "he"
+                                  ? `📊 אטומים חיים (${Object.keys(variant.result.atoms).length})`
+                                  : `📊 Live Atoms (${Object.keys(variant.result.atoms).length})`}
+                              </summary>
+                              <div className="grid grid-cols-2 gap-2">
+                                {Object.entries(variant.result.atoms).map(
+                                  ([key, atom]) => (
+                                    <AtomDisplay
+                                      key={key}
+                                      atomKey={key}
+                                      atom={atom}
+                                      lang={lang}
+                                      isLowConf={variant.result.lowConfidenceAtoms?.includes(
+                                        key
+                                      )}
+                                    />
+                                  )
+                                )}
+                              </div>
+                            </details>
+                          )}
                       </div>
                     ))}
                   </div>
