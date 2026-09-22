@@ -183,7 +183,7 @@ export default function MoneyHackFinderPage() {
       />
       <DemoLayout
         lang={lang}
-        title={t(lang, "demo10")}
+        title={t(lang, "demo17")}
         description={
           lang === "he"
             ? "לולאת אבולוציה אוטומטית עם Flash לייצר גרסאות ו-Jev לשפוט כל אחת באטומים"

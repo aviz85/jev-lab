@@ -74,7 +74,7 @@ export const demos = [
   },
   {
     id: "money-hack-finder",
-    titleKey: "demo10" as const,
+    titleKey: "demo17" as const,
     path: "/demos/money-hack-finder",
     icon: "💰",
     descriptionEn: "AI-powered idea evolution loop with atomic scoring",
