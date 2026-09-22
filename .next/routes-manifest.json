@@ -1,0 +1,183 @@
+{
+  "version": 3,
+  "pages404": true,
+  "appType": "app",
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "onMatchHeaders": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/api/citation-check",
+      "regex": "^/api/citation\\-check(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/citation\\-check(?:/)?$"
+    },
+    {
+      "page": "/api/icp-scorer",
+      "regex": "^/api/icp\\-scorer(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/icp\\-scorer(?:/)?$"
+    },
+    {
+      "page": "/api/inbox-triage",
+      "regex": "^/api/inbox\\-triage(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/inbox\\-triage(?:/)?$"
+    },
+    {
+      "page": "/api/marketplace-cop",
+      "regex": "^/api/marketplace\\-cop(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/marketplace\\-cop(?:/)?$"
+    },
+    {
+      "page": "/api/model-router",
+      "regex": "^/api/model\\-router(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/model\\-router(?:/)?$"
+    },
+    {
+      "page": "/api/moderation",
+      "regex": "^/api/moderation(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/moderation(?:/)?$"
+    },
+    {
+      "page": "/api/money-hack-finder",
+      "regex": "^/api/money\\-hack\\-finder(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/money\\-hack\\-finder(?:/)?$"
+    },
+    {
+      "page": "/api/prompt-injection",
+      "regex": "^/api/prompt\\-injection(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/prompt\\-injection(?:/)?$"
+    },
+    {
+      "page": "/api/subtext-chat",
+      "regex": "^/api/subtext\\-chat(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/subtext\\-chat(?:/)?$"
+    },
+    {
+      "page": "/api/tos-finder",
+      "regex": "^/api/tos\\-finder(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/tos\\-finder(?:/)?$"
+    },
+    {
+      "page": "/demos/citation-check",
+      "regex": "^/demos/citation\\-check(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/demos/citation\\-check(?:/)?$"
+    },
+    {
+      "page": "/demos/icp-scorer",
+      "regex": "^/demos/icp\\-scorer(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/demos/icp\\-scorer(?:/)?$"
+    },
+    {
+      "page": "/demos/inbox-triage",
+      "regex": "^/demos/inbox\\-triage(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/demos/inbox\\-triage(?:/)?$"
+    },
+    {
+      "page": "/demos/marketplace-cop",
+      "regex": "^/demos/marketplace\\-cop(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/demos/marketplace\\-cop(?:/)?$"
+    },
+    {
+      "page": "/demos/model-router",
+      "regex": "^/demos/model\\-router(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/demos/model\\-router(?:/)?$"
+    },
+    {
+      "page": "/demos/moderation",
+      "regex": "^/demos/moderation(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/demos/moderation(?:/)?$"
+    },
+    {
+      "page": "/demos/money-hack-finder",
+      "regex": "^/demos/money\\-hack\\-finder(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/demos/money\\-hack\\-finder(?:/)?$"
+    },
+    {
+      "page": "/demos/prompt-injection",
+      "regex": "^/demos/prompt\\-injection(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/demos/prompt\\-injection(?:/)?$"
+    },
+    {
+      "page": "/demos/subtext-chat",
+      "regex": "^/demos/subtext\\-chat(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/demos/subtext\\-chat(?:/)?$"
+    },
+    {
+      "page": "/demos/tos-finder",
+      "regex": "^/demos/tos\\-finder(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/demos/tos\\-finder(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}

@@ -31,20 +31,22 @@ export function buildMoneyHackState(idea: string): MoneyHackState {
   const priceMatch = text.match(
     /(?:₪|ILS|NIS|\$|USD|€|EUR)\s*[\d,]+(?:\.\d+)?|[\d,]+(?:\.\d+)?\s*(?:₪|ILS|NIS|\$|USD|€|EUR|shekel|שקל)/i
   );
-  if (priceMatch) optional.mentioned_price = priceMatch[0].trim();
+  if (priceMatch && priceMatch[0]) optional.mentioned_price = priceMatch[0].trim();
 
   if (/\bai\b|artificial intelligence|gpt|llm|chatgpt|claude|jev/i.test(text)) {
     optional.claims_ai = true;
   }
   if (/whatsapp|telegram|instagram|facebook|tiktok|email|sms/i.test(lower)) {
-    optional.channel_hint = (text.match(
+    const channelMatch = text.match(
       /whatsapp|telegram|instagram|facebook|tiktok|email|sms/i
-    ) || [])[0];
+    );
+    if (channelMatch && channelMatch[0]) optional.channel_hint = channelMatch[0];
   }
   if (/\b(salon|clinic|restaurant|shop|store|agency|freelancer|coach|course)\b/i.test(text)) {
-    optional.audience_hint = (text.match(
+    const audienceMatch = text.match(
       /\b(salon|clinic|restaurant|shop|store|agency|freelancer|coach|course)s?\b/i
-    ) || [])[0];
+    );
+    if (audienceMatch && audienceMatch[0]) optional.audience_hint = audienceMatch[0];
   }
 
   return {
@@ -537,7 +539,7 @@ export async function evaluateIdea(idea: string, lang: "en" | "he" = "en"): Prom
     const questions = buildMoneyHackQuestions();
 
     const response = await client.systemOne({
-      state,
+      state: state as any,
       model: MODEL,
       questions,
     });

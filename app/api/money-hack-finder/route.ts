@@ -221,7 +221,7 @@ export async function POST(request: NextRequest) {
             )
           );
 
-          const seedIdea = mode === "seed" && round === 1 ? idea : null;
+          const seedIdea = mode === "seed" && round === 1 ? idea || null : null;
           const ideas = await generateVariants(
             seedIdea,
             variantsPerRound,

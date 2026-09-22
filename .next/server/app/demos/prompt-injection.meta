@@ -1,0 +1,31 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/demos/layout,_N_T_/demos/prompt-injection/layout,_N_T_/demos/prompt-injection/page,_N_T_/demos/prompt-injection"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/demos/prompt-injection/__PAGE__"
+  ],
+  "prefetchHints": {
+    "hints": 64,
+    "slots": {
+      "children": {
+        "hints": 96,
+        "slots": {
+          "children": {
+            "hints": 96,
+            "slots": {
+              "children": {
+                "hints": 160,
+                "slots": null
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
