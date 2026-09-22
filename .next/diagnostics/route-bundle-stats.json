@@ -1,10 +1,10 @@
 [
   {
     "route": "/demos/money-hack-finder",
-    "firstLoadUncompressedJsBytes": 479888,
+    "firstLoadUncompressedJsBytes": 484754,
     "firstLoadChunkPaths": [
       ".next/static/chunks/3fntmmi971322.js",
-      ".next/static/chunks/2lyig0iq-asdv.js",
+      ".next/static/chunks/3i_ad66le4-k5.js",
       ".next/static/chunks/1u5zan5bs9a7v.js",
       ".next/static/chunks/1z99mlp5cofct.js",
       ".next/static/chunks/27t_qfc-3_lzs.js",
