@@ -72,4 +72,13 @@ export const demos = [
     descriptionEn: "Composite scoring with adjustable weights",
     descriptionHe: "ניקוד מורכב עם משקלים ניתנים לכוונון",
   },
+  {
+    id: "money-hack-finder",
+    titleKey: "demo17" as const,
+    path: "/demos/money-hack-finder",
+    icon: "💰",
+    descriptionEn: "AI-powered idea evolution loop with atomic scoring",
+    descriptionHe: "לולאת אבולוציה לרעיונות עם ניקוד אטומי מופעל ע״י AI",
+    featured: true,
+  },
 ];
